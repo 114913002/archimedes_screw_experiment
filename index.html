@@ -37,6 +37,27 @@
             color: red;
             display: none;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .spiral-pump {
+            max-width: 100%;
+            height: auto;
+        }
+        .next-button {
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -47,11 +68,15 @@
             <h2>階段 1：進入實驗室</h2>
             <p>選擇「阿基米德螺旋泵」實驗模組。</p>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/dX9GvCF6620" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p>進入主實驗畫面。</p>
+            <p>看完介紹後，請進入實驗室。</p>
+            <a href="#experiment" class="next-button">進入實驗室</a>
         </div>
-
-        <div id="experiment-controls">
+        
+        <div id="experiment" style="display: none;">
             <h2>階段 2：操作模擬</h2>
+            
+            <img src="https://i.pinimg.com/originals/cb/55/08/cb5508939c952c0394de920e6e144b90.jpg" alt="螺旋泵浦示意圖" class="spiral-pump">
+            
             <label for="angle">幫浦與地面夾角:</label>
             <select id="angle">
                 <option value="30">30度</option>
@@ -77,19 +102,32 @@
             <div class="warning" id="warning-message">你現在要測試的是哪個變因對輸水效率的影響呢?</div>
         </div>
 
-        <div id="results" class="chart">
+        <div id="results" class="chart" style="display: none;">
             <h2>數據顯示</h2>
             <p>每分鐘輸水量：<span id="flow-rate">0</span> mL/min</p>
             <p>輸水效率：<span id="efficiency">0</span></p>
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>實驗編號</th>
+                        <th>輸水量 (mL/min)</th>
+                        <th>輸水效率 (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 實驗數據將在這裡插入 -->
+                </tbody>
+            </table>
         </div>
-
-        <h2>階段 3：數據分析</h2>
-        <p>完成至少 3 次實驗後，解鎖「數據分析」頁面。</p>
-        <!-- 這裡可以放置數據分析圖表的元素，如 Chart.js -->
     </div>
 
     <script>
         let experimentCount = 0;
+
+        document.querySelector('.next-button').onclick = function() {
+            document.querySelector('.video-container').style.display = 'none';
+            document.getElementById('experiment').style.display = 'block';
+        };
 
         document.getElementById('start-button').onclick = function() {
             const angle = document.getElementById('angle').value;
@@ -115,11 +153,17 @@
                 efficiency = Math.floor(Math.random() * 90); // 跟據設定的最大效率進行隨機
             }
 
+            const resultsTable = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+            const newRow = resultsTable.insertRow();
+            newRow.insertCell(0).innerText = experimentCount + 1;
+            newRow.insertCell(1).innerText = flowRate;
+            newRow.insertCell(2).innerText = efficiency;
+
             document.getElementById('flow-rate').innerText = flowRate;
             document.getElementById('efficiency').innerText = efficiency;
 
+            document.getElementById('results').style.display = 'block';
             experimentCount++;
-            // 儲存數據邏輯沒有在此處提及
         };
     </script>
 </body>
