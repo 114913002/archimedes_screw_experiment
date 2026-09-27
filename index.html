@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿基米德螺旋抽水器探究實驗室</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            margin: 0 auto;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .video-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #experiment-controls {
+            margin-bottom: 20px;
+        }
+        .chart {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .warning {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>阿基米德螺旋抽水器探究實驗室</h1>
+        
+        <div class="video-container">
+            <h2>階段 1：進入實驗室</h2>
+            <p>選擇「阿基米德螺旋泵」實驗模組。</p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/dX9GvCF6620" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p>進入主實驗畫面。</p>
+        </div>
+
+        <div id="experiment-controls">
+            <h2>階段 2：操作模擬</h2>
+            <label for="angle">幫浦與地面夾角:</label>
+            <select id="angle">
+                <option value="30">30度</option>
+                <option value="45" selected>45度</option>
+                <option value="60">60度</option>
+            </select>
+            <br>
+            <label for="speed">轉速:</label>
+            <select id="speed">
+                <option value="low" selected>低速</option>
+                <option value="medium">中速</option>
+                <option value="high">高速</option>
+            </select>
+            <br>
+            <label for="diameter">管徑:</label>
+            <select id="diameter">
+                <option value="2">半徑 2 公尺</option>
+                <option value="4">半徑 4 公尺</option>
+                <option value="6" selected>半徑 6 公尺</option>
+            </select>
+            <br>
+            <button id="start-button">啟動</button>
+            <div class="warning" id="warning-message">你現在要測試的是哪個變因對輸水效率的影響呢?</div>
+        </div>
+
+        <div id="results" class="chart">
+            <h2>數據顯示</h2>
+            <p>每分鐘輸水量：<span id="flow-rate">0</span> mL/min</p>
+            <p>輸水效率：<span id="efficiency">0</span></p>
+        </div>
+
+        <h2>階段 3：數據分析</h2>
+        <p>完成至少 3 次實驗後，解鎖「數據分析」頁面。</p>
+        <!-- 這裡可以放置數據分析圖表的元素，如 Chart.js -->
+    </div>
+
+    <script>
+        let experimentCount = 0;
+
+        document.getElementById('start-button').onclick = function() {
+            const angle = document.getElementById('angle').value;
+            const speed = document.getElementById('speed').value;
+            const diameter = document.getElementById('diameter').value;
+
+            // 檢查是否有兩種變因被改變
+            if (experimentCount > 0 && (angle || speed || diameter)) {
+                document.getElementById('warning-message').style.display = 'block';
+            } else {
+                document.getElementById('warning-message').style.display = 'none';
+            }
+
+            let flowRate, efficiency;
+
+            // 設定最佳參數的數據
+            if (angle === "45" && speed === "low" && diameter === "6") {
+                flowRate = 100; // 預設最佳輸水量
+                efficiency = 90; // 預設最佳輸水效率
+            } else {
+                // 根據最佳數據削減
+                flowRate = Math.floor(Math.random() * 100); // 隨機產生輸水量
+                efficiency = Math.floor(Math.random() * 90); // 跟據設定的最大效率進行隨機
+            }
+
+            document.getElementById('flow-rate').innerText = flowRate;
+            document.getElementById('efficiency').innerText = efficiency;
+
+            experimentCount++;
+            // 儲存數據邏輯沒有在此處提及
+        };
+    </script>
+</body>
+</html>
